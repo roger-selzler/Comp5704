@@ -1,0 +1,84 @@
+#!/bin/bash
+#clear
+
+for arg in "$@"
+do
+        case $arg in
+                --help)
+			printf "\noptions\tmeaning\n"
+			printf -- "--help\t Help\n"
+			printf -- "-G\ttensorFlow will be installed using the GPU package ofr CUDA-enabled GPU cards\n"
+			printf -- "-C\ttensorFlow will be installed using the CPU version\n"
+			exit 1
+                        ;;
+        esac
+done
+
+
+printf "Starting the installation of tensorflow\n\n"
+CF=$(pwd)
+
+printf "\nUpdating apt-get"
+sudo apt-get update -y
+
+printf "\nCurrent foler is: $CF"
+
+
+# Install git
+printf "\nCheking for git - "
+if [[ -e $(which git) ]] ;
+then
+	echo "git already installed."
+else
+	echo "Installing git..."
+	sudo apt-get install git 
+fi
+
+
+
+# Install vim
+printf "\nCheking for vim - "
+if [[ -e $(which vim) ]] ;
+then
+        echo "vim already installed."
+else
+        echo "Installing vim..."
+	sudo apt install -y vim
+fi
+
+
+#update pip
+printf "\nUpgrading and installing pip\n"
+sudo pip install --upgrade pip
+
+
+
+#### Tensor flow installation ####
+printf "\nValues of tensorVal is %s" ${tensorVal:=$("GPU")}
+
+
+printf "\nInstalling tensorflow assuming there is a gpu installed...\n"
+for arg in "$@"
+do
+        case $arg in
+                -G)
+                        tensorVal=GPU
+                        ;;
+                -C)
+                        tensorVal=CPU
+                        ;;
+        esac
+done
+
+printf "\nVersion of tensorFlow to be installed: %s\n\n" ${tensorVal:="GPU"}
+
+case $tensorVal in
+        GPU)
+                echo "Installing tensorFlow using the GPU package for CUDA-enabled GPU cards"
+      		sudo pip install tensorflow-gpu
+		;;
+        CPU)
+                echo "Installing tensorFlow using the CPU-only version"
+      		sudo pip install tensorflow
+		;;
+esac
