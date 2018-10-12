@@ -82,3 +82,8 @@ case $tensorVal in
       		sudo pip install tensorflow
 		;;
 esac
+
+
+
+#### install Jupyter editor
+
