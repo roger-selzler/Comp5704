@@ -1,29 +1,13 @@
-#!/bin/bash
-clear
+import argparse
+import sys
 
-printf "\nInstalling tensorflow assuming there is a gpu installed...\n"
-for arg in "$@"
-do
-        case $arg in
-                -G)
-                        tensorVal=GPU
-                        ;;
-                -C)
-                        tensorVal=CPU
-                        ;;
-        esac
-done
+import tensorflow as tf
 
-printf "\nValues of tensorVal is %s\n\n" ${tensorVal:="GPU"}
+FLAGS = None
 
-case $tensorVal in
-	GPU)
-		echo "value was GPU"
-		;;
-	CPU)	
-		echo "value was CPU"
-		;;
-esac
 
-#sudo pip install tensorflow-gpu
-
+def main(_):
+  ps_hosts = FLAGS.ps_hosts.split(",")
+  worker_hosts = FLAGS.worker_hosts.split(",")
+  print(ps_hosts)
+  print(worker_hosts)
